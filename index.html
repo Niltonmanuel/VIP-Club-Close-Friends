@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Close Friends — Acesso VIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold2: #E8C97A;
+  --gold3: #F5E9C8;
+  --orange: #E8670A;
+  --red: #CC2200;
+  --black: #080808;
+  --dark: #0E0E0E;
+  --dark2: #161616;
+  --dark3: #1E1E1E;
+  --dark4: #272727;
+  --cream: #F0EBE0;
+  --white: #FFFFFF;
+  --muted: #777777;
+  --light: #AAAAAA;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:400;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* GRAIN */
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+
+/* ===== COUNTDOWN BAR ===== */
+.countdown-bar{background:#1A0A00;border-bottom:1px solid var(--orange);padding:10px 16px;text-align:center;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);position:relative;z-index:100}
+.countdown-bar span{color:var(--white);margin:0 4px}
+#timer{color:var(--gold);font-weight:700;letter-spacing:.08em}
+
+/* ===== HERO ===== */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:60px 24px 80px;overflow:hidden}
+.hero-photo{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,8,8,0.1) 0%,rgba(8,8,8,0.4) 50%,rgba(8,8,8,0.98) 100%);z-index:1}
+.hero-photo-bg{position:absolute;inset:0;background:#0E0E0E url('') center top/cover no-repeat;filter:grayscale(60%) contrast(1.1);z-index:0}
+/* Placeholder pattern for photo */
+.hero-photo-bg::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(ellipse 80% 100% at 50% 0%,rgba(201,168,76,.18) 0%,transparent 70%),
+  linear-gradient(180deg,#1a1206 0%, #080808 100%);z-index:0}
+.hero-content{position:relative;z-index:2;max-width:720px}
+.hero-breadcrumb{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
+.hero-breadcrumb .arrow{color:var(--gold)}
+.hero-breadcrumb strong{color:var(--gold)}
+.hero-social-proof{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:8px 16px;border-radius:100px;font-size:12px;color:var(--light);margin-bottom:28px}
+.avatars{display:flex}
+.avatars span{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#7a4e1c);border:2px solid var(--black);margin-left:-6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--black)}
+.avatars span:first-child{margin-left:0}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,11vw,108px);line-height:.92;letter-spacing:.01em;color:var(--white);margin-bottom:16px}
+.hero h1 .gold-text{color:var(--gold)}
+.hero-sub{font-size:clamp(15px,2.2vw,19px);color:var(--light);line-height:1.65;max-width:560px;margin:0 auto 40px;font-weight:300}
+.hero-sub strong{color:var(--white);font-weight:500}
+.btn-main{display:inline-flex;align-items:center;gap:12px;background:var(--gold);color:var(--black);font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:20px 48px;border-radius:3px;text-decoration:none;transition:all .25s;border:none;cursor:pointer}
+.btn-main:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 16px 48px rgba(201,168,76,.4)}
+.btn-main svg{width:16px;height:16px;flex-shrink:0}
+.hero-trust{margin-top:14px;font-size:12px;color:var(--muted);letter-spacing:.06em}
+/* Scroll indicator */
+.scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.scroll-hint .line{width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--gold));animation:scrollLine 2s ease-in-out infinite}
+@keyframes scrollLine{0%,100%{opacity:.3;transform:scaleY(0.5)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ===== QUOTE BLOCK ===== */
+.quote-block{background:var(--dark2);border-left:3px solid var(--gold);padding:40px 48px;margin:0;position:relative;overflow:hidden}
+.quote-block::before{content:'"';font-family:'Cormorant Garamond',serif;font-size:180px;color:rgba(201,168,76,.07);position:absolute;top:-20px;left:20px;line-height:1}
+.quote-block blockquote{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,28px);font-style:italic;font-weight:300;color:var(--cream);line-height:1.55;position:relative;z-index:1;max-width:800px;margin:0 auto}
+.quote-block cite{display:block;margin-top:16px;font-family:'DM Sans',sans-serif;font-size:13px;font-style:normal;color:var(--muted);letter-spacing:.08em}
+
+/* ===== PROBLEM SECTION ===== */
+.section{padding:100px 24px;max-width:1000px;margin:0 auto;position:relative;z-index:1}
+.section-full{padding:100px 24px;position:relative;z-index:1}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--gold)}
+.big-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,8vw,84px);line-height:.95;letter-spacing:.02em;margin-bottom:24px}
+.big-title .accent{color:var(--gold)}
+.big-title .strike{text-decoration:line-through;color:var(--muted);opacity:.6}
+.body-text{font-size:16px;color:var(--light);line-height:1.8;max-width:680px;font-weight:300}
+.body-text strong{color:var(--white);font-weight:500}
+
+/* Warning cards */
+.problem-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-top:56px;background:rgba(255,255,255,.04)}
+.problem-card{background:var(--dark);padding:36px 28px}
+.problem-card .icon{font-size:28px;margin-bottom:16px}
+.problem-card h4{font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;line-height:1.4}
+.problem-card p{font-size:13px;color:var(--muted);line-height:1.65}
+.problem-card.red-card{background:rgba(204,34,0,.08);border-top:2px solid var(--red)}
+.problem-card.gold-card{background:rgba(201,168,76,.05);border-top:2px solid var(--gold)}
+
+/* Forever text */
+.forever-block{background:var(--dark2);padding:56px 48px;margin:60px auto;max-width:780px;border:1px solid rgba(255,255,255,.07);border-radius:2px;text-align:center}
+.forever-block h3{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,64px);color:var(--gold);letter-spacing:.04em;margin-bottom:16px}
+.forever-list{list-style:none;text-align:left;display:inline-block;margin-top:16px}
+.forever-list li{font-size:15px;color:var(--light);padding:8px 0;display:flex;align-items:flex-start;gap:12px;line-height:1.5}
+.forever-list li::before{content:'⚠';font-size:14px;flex-shrink:0;margin-top:2px}
+
+/* ===== PROOF STRIP ===== */
+.proof-strip{background:var(--dark2);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)}
+.proof-strip-inner{display:flex;justify-content:center;flex-wrap:wrap;max-width:1100px;margin:0 auto;padding:0 24px}
+.proof-item{display:flex;flex-direction:column;align-items:center;padding:36px 48px;border-right:1px solid rgba(255,255,255,.07);gap:6px}
+.proof-item:last-child{border-right:none}
+.proof-num{font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:1;color:var(--gold);letter-spacing:.04em}
+.proof-label{font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;text-align:center;line-height:1.4}
+
+/* ===== PHOTOS GRID ===== */
+.photos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:48px}
+.photo-box{background:var(--dark3);aspect-ratio:4/3;border-radius:2px;overflow:hidden;position:relative}
+.photo-box-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;background:
+  linear-gradient(135deg,var(--dark3) 0%,var(--dark4) 100%)}
+.photo-box .label{position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,.85);padding:4px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-radius:2px}
+
+/* ===== DIFFERENCE SECTION ===== */
+.diff-bg{background:linear-gradient(160deg,rgba(201,168,76,.06) 0%,var(--black) 40%)}
+.diff-table{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:48px;background:rgba(255,255,255,.05)}
+.diff-col{background:var(--dark);padding:40px 32px}
+.diff-col.before{border-top:3px solid var(--red)}
+.diff-col.after{border-top:3px solid var(--gold)}
+.diff-col-label{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;margin-bottom:20px}
+.diff-col.before .diff-col-label{color:var(--red)}
+.diff-col.after .diff-col-label{color:var(--gold)}
+.diff-col h3{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,44px);margin-bottom:20px;line-height:1}
+.diff-col.before h3{color:var(--light)}
+.diff-col.after h3{color:var(--gold)}
+.diff-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.diff-list li{font-size:14px;color:var(--light);display:flex;align-items:flex-start;gap:10px;line-height:1.55}
+.diff-list li span{flex-shrink:0;margin-top:1px}
+.diff-col.before .diff-list li span{color:var(--red)}
+.diff-col.after .diff-list li span{color:var(--gold)}
+
+/* ===== CF INTRO / YELLOW BG SECTION ===== */
+.cf-intro-bg{background:var(--gold);padding:80px 24px;text-align:center}
+.cf-intro-bg h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,7vw,76px);color:var(--black);letter-spacing:.02em;line-height:1;margin-bottom:16px}
+.cf-intro-bg p{font-size:16px;color:rgba(0,0,0,.7);max-width:620px;margin:0 auto;line-height:1.7;font-weight:400}
+.cf-intro-bg strong{color:var(--black);font-weight:700}
+
+/* ===== WHAT YOU GET ===== */
+.offer-block{background:var(--dark2);border:1px solid rgba(201,168,76,.18);border-radius:3px;padding:48px 40px;margin-bottom:24px;position:relative;overflow:hidden}
+.offer-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.offer-tag{display:inline-block;background:var(--dark3);border:1px solid rgba(201,168,76,.3);color:var(--gold);font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:5px 14px;border-radius:2px;margin-bottom:20px}
+.offer-tag.live{background:rgba(232,103,10,.12);border-color:rgba(232,103,10,.4);color:var(--orange)}
+.offer-block h3{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,44px);margin-bottom:6px}
+.offer-value{font-size:13px;color:var(--muted);margin-bottom:20px}
+.offer-value strong{color:var(--gold);font-size:16px}
+.offer-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.offer-list li{font-size:14px;color:var(--light);display:flex;align-items:flex-start;gap:10px;line-height:1.55}
+.offer-list li::before{content:'✦';color:var(--gold);font-size:10px;flex-shrink:0;margin-top:3px}
+
+/* ===== PRICING ===== */
+.pricing-wrap{max-width:780px;margin:0 auto}
+.price-summary{background:var(--dark2);border:1px solid rgba(201,168,76,.2);border-radius:3px;padding:48px 40px;position:relative}
+.price-summary::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold)}
+.price-items{list-style:none;margin:24px 0 32px;display:flex;flex-direction:column;gap:10px}
+.price-items li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px}
+.price-items li .name{color:var(--light)}
+.price-items li .val{color:var(--gold2);font-weight:500}
+.price-items li .val.strike{text-decoration:line-through;color:var(--muted)}
+.price-total-area{text-align:center;padding:24px 0 0}
+.price-from{font-size:13px;color:var(--muted);text-decoration:line-through}
+.price-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,10vw,96px);color:var(--gold);letter-spacing:.03em;line-height:1}
+.price-big sup{font-size:.35em;vertical-align:super;color:var(--gold2)}
+.price-period{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.price-installments{font-size:15px;color:var(--light);margin:8px 0 28px}
+.price-installments strong{color:var(--white);font-weight:600}
+.btn-buy{display:flex;align-items:center;justify-content:center;gap:12px;background:var(--gold);color:var(--black);font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;letter-spacing:.1em;text-transform:uppercase;padding:22px 40px;border-radius:3px;text-decoration:none;transition:all .25s;cursor:pointer;border:none;width:100%}
+.btn-buy:hover{background:var(--gold2);box-shadow:0 20px 60px rgba(201,168,76,.4)}
+.vagas-text{text-align:center;font-size:13px;color:var(--muted);margin-top:12px}
+.vagas-text strong{color:var(--gold)}
+
+/* ===== GUARANTEE ===== */
+.guarantee{background:var(--dark2);border:1px solid rgba(255,255,255,.07);padding:56px 48px;display:flex;align-items:flex-start;gap:40px;max-width:780px;margin:40px auto 0;border-radius:2px}
+.guarantee-seal{width:100px;height:100px;border:2px solid var(--gold);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;gap:2px}
+.guarantee-seal span:first-child{font-size:30px}
+.guarantee-seal span:last-child{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);text-align:center;line-height:1.2}
+.guarantee h3{font-family:'Bebas Neue',sans-serif;font-size:36px;margin-bottom:10px}
+.guarantee p{font-size:14px;color:var(--light);line-height:1.75}
+
+/* ===== TESTIMONIALS ===== */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
+.testi-card{background:var(--dark2);border:1px solid rgba(255,255,255,.07);padding:32px;border-radius:2px;position:relative;transition:border-color .3s,transform .3s}
+.testi-card:hover{border-color:rgba(201,168,76,.3);transform:translateY(-4px)}
+.testi-card::before{content:'"';font-family:'Cormorant Garamond',serif;font-size:80px;color:rgba(201,168,76,.1);position:absolute;top:8px;right:18px;line-height:1}
+.testi-stars{color:var(--gold);font-size:12px;letter-spacing:3px;margin-bottom:12px}
+.testi-text{font-size:14px;color:var(--light);line-height:1.7;margin-bottom:20px;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:10px}
+.testi-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#6b3d0e);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--black);flex-shrink:0}
+.testi-name{font-size:14px;font-weight:500;color:var(--cream)}
+.testi-handle{font-size:12px;color:var(--muted)}
+.testi-result{margin-top:14px;padding:8px 12px;background:rgba(201,168,76,.07);border-left:2px solid var(--gold);font-size:12px;color:var(--gold2);font-weight:500}
+
+/* ===== FOUNDER SECTION ===== */
+.founder-section{background:var(--dark);padding:100px 24px}
+.founder-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:center}
+.founder-photo-wrap{position:relative}
+.founder-photo-box{background:var(--dark3);aspect-ratio:3/4;border-radius:2px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(201,168,76,.15)}
+.founder-photo-box::after{content:'';position:absolute;bottom:0;left:0;right:0;height:30%;background:linear-gradient(to top,var(--dark),transparent)}
+.founder-tag{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--black);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:8px 20px;border-radius:2px;white-space:nowrap}
+.founder-timeline{list-style:none;display:flex;flex-direction:column;gap:0;margin-top:32px}
+.timeline-item{display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.timeline-item:last-child{border-bottom:none}
+.timeline-year{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);flex-shrink:0;width:44px}
+.timeline-text{font-size:14px;color:var(--light);line-height:1.5}
+
+/* ===== FAQ ===== */
+.faq-list{display:flex;flex-direction:column;max-width:780px;margin-top:48px}
+.faq-item{border-bottom:1px solid rgba(255,255,255,.08);padding:0}
+.faq-question{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 0;cursor:pointer}
+.faq-question h4{font-size:15px;font-weight:400;color:var(--cream);line-height:1.4}
+.faq-icon{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);flex-shrink:0;transition:transform .3s;line-height:1}
+.faq-answer{font-size:14px;color:var(--muted);line-height:1.8;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s}
+.faq-item.open .faq-answer{max-height:300px;padding-bottom:20px}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+
+/* ===== FINAL CTA ===== */
+.final-section{background:var(--gold);padding:100px 24px;text-align:center;position:relative;overflow:hidden}
+.final-section::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");pointer-events:none}
+.final-section h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,9vw,96px);color:var(--black);letter-spacing:.02em;line-height:.95;margin-bottom:20px;position:relative;z-index:1}
+.final-section p{font-size:17px;color:rgba(0,0,0,.7);max-width:540px;margin:0 auto 40px;line-height:1.65;position:relative;z-index:1}
+.btn-dark{display:inline-flex;align-items:center;gap:12px;background:var(--black);color:var(--gold);font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:20px 48px;border-radius:3px;text-decoration:none;transition:all .25s;position:relative;z-index:1}
+.btn-dark:hover{background:var(--dark2);box-shadow:0 16px 48px rgba(0,0,0,.5);transform:translateY(-2px)}
+.final-vagas{font-size:13px;color:rgba(0,0,0,.55);margin-top:14px;position:relative;z-index:1}
+.final-vagas strong{color:var(--black)}
+
+/* ===== FOOTER ===== */
+footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.06);padding:36px 24px;text-align:center}
+footer p{font-size:12px;color:var(--muted);line-height:1.8}
+footer a{color:var(--gold);text-decoration:none}
+
+/* ===== STICKY ===== */
+.sticky-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(8,8,8,.97);border-top:1px solid rgba(201,168,76,.35);padding:14px 24px;display:flex;align-items:center;justify-content:center;gap:20px;backdrop-filter:blur(16px);transform:translateY(100%);transition:transform .4s ease;box-shadow:0 -8px 40px rgba(0,0,0,.5)}
+.sticky-bar.visible{transform:translateY(0)}
+.sticky-bar .sticky-text{font-size:13px;color:var(--light)}
+.sticky-bar .sticky-text strong{color:var(--gold)}
+.sticky-bar .btn-main{padding:12px 28px;font-size:12px;border-radius:2px}
+
+/* ===== DIVIDER ===== */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.25),transparent);margin:0 auto}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .problem-cards{grid-template-columns:1fr}
+  .photos-grid{grid-template-columns:1fr 1fr}
+  .diff-table{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .proof-strip-inner{flex-direction:column;gap:0}
+  .proof-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.07);padding:24px}
+  .proof-item:last-child{border-bottom:none}
+  .founder-inner{grid-template-columns:1fr}
+  .guarantee{flex-direction:column;align-items:center;text-align:center;padding:36px 28px}
+  .sticky-bar .sticky-text{display:none}
+  .forever-block{padding:36px 24px}
+  .offer-block{padding:32px 24px}
+  .price-summary{padding:32px 24px}
+  section,.section{padding:72px 24px}
+}
+
+/* ===== REVEAL ANIMATION ===== */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- COUNTDOWN -->
+<div class="countdown-bar">
+  🔥 Oferta de lançamento encerra em: <span id="timer">09:11:30:36</span> &nbsp;·&nbsp; Apenas <span>47 vagas</span> disponíveis
+</div>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="hero-photo-bg"></div>
+  <div class="hero-photo"></div>
+  <div class="hero-content">
+    <div class="hero-breadcrumb">
+      Close Friends <span class="arrow">→</span> <strong>VIP Club</strong>
+    </div>
+    <div class="hero-social-proof">
+      <div class="avatars">
+        <span>AM</span><span>RL</span><span>CM</span><span>JP</span>
+      </div>
+      <span>+2.400 membros em Moçambique</span>
+    </div>
+    <h1>
+      OS SEGREDOS<br>
+      QUE EU <span class="gold-text">NUNCA</span><br>
+      MOSTRO NO FEED.
+    </h1>
+    <p class="hero-sub">
+      Você vai ver, nos meus stories de melhores amigos, as <strong>estratégias reais</strong> que usam os maiores vendedores online de Moçambique — sem filtro, sem perfumaria.
+    </p>
+    <a href="#planos" class="btn-main">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Quero Acesso Agora
+    </a>
+    <div class="hero-trust">🔒 Acesso imediato · Garantia 7 dias · Cancele quando quiser</div>
+  </div>
+  <div class="scroll-hint">
+    <div class="line"></div>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="quote-block">
+  <blockquote>
+    "Qualquer pessoa pode cobrar R$10.000 por isso. A informação que ele entrega num único story vale mais do que a maioria dos cursos premium do mercado."
+    <cite>— Membro do clube, Maputo</cite>
+  </blockquote>
+</div>
+
+<!-- ===== PROOF STRIP ===== -->
+<div class="proof-strip">
+  <div class="proof-strip-inner">
+    <div class="proof-item reveal">
+      <div class="proof-num">2.4K+</div>
+      <div class="proof-label">Membros<br>em Moçambique</div>
+    </div>
+    <div class="proof-item reveal">
+      <div class="proof-num">4.9★</div>
+      <div class="proof-label">Avaliação<br>média</div>
+    </div>
+    <div class="proof-item reveal">
+      <div class="proof-num">3×</div>
+      <div class="proof-label">Conteúdos VIP<br>por semana</div>
+    </div>
+    <div class="proof-item reveal">
+      <div class="proof-num">7d</div>
+      <div class="proof-label">Garantia<br>total</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROBLEM ===== -->
+<div class="section-full" style="background:var(--dark)">
+  <div class="section" style="padding-top:80px;padding-bottom:0">
+    <div class="eyebrow reveal">O mercado foi contaminado</div>
+    <h2 class="big-title reveal">O QUE VOCÊ<br>NÃO SABIA<br><span class="accent">ATÉ HOJE.</span></h2>
+    <p class="body-text reveal">A verdade é que o que te ensinaram não cabe em 2025. Enquanto você lê conteúdo gratuito sobre como vender, os melhores já estão usando o manual que ninguém publica.</p>
+  </div>
+  <div style="max-width:1000px;margin:0 auto;padding:0 24px">
+    <div class="problem-cards reveal">
+      <div class="problem-card red-card">
+        <div class="icon">⚠️</div>
+        <h4>Alguém está a capturar seus clientes</h4>
+        <p>Enquanto você experimenta, existe alguém com a fórmula testada já a vender para o seu público.</p>
+      </div>
+      <div class="problem-card red-card">
+        <div class="icon">⚠️</div>
+        <h4>Alguém construindo sua audiência</h4>
+        <p>Todos os dias sem estratégia correcta são dias em que outra pessoa torna o mercado mais difícil para ti.</p>
+      </div>
+      <div class="problem-card red-card">
+        <div class="icon">⚠️</div>
+        <h4>Alguém fechando o teu negócio</h4>
+        <p>No mercado digital, quem tem informação privilegiada domina. Quem não tem, fecha.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="forever-block reveal">
+    <h3>É UMA ETERNIDADE!</h3>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:8px">A cada semana que passa sem o conteúdo certo:</p>
+    <ul class="forever-list">
+      <li>A concorrência deixou-te mais para trás</li>
+      <li>Perdeste mais vendas que nunca vais saber que existiram</li>
+      <li>Continuas a testar sozinho o que outros já provaram e documentaram</li>
+      <li>Pagas cada vez mais caro por resultados cada vez mais fracos</li>
+    </ul>
+  </div>
+
+  <div class="section" style="padding-top:0;padding-bottom:80px">
+    <div class="eyebrow reveal">A diferença entre agora e 2026</div>
+    <h2 class="big-title reveal">ENQUANTO OS<br>"ESPECIALISTAS"<br><span class="accent">ENGANAM,</span><br>EU CONTINUO<br>NO LABORATÓRIO.</h2>
+    <p class="body-text reveal">Os resultados abaixo não são teóricos. São o produto de anos a testar, documentar e refinar — em mercados reais, com dinheiro real.</p>
+  </div>
+</div>
+
+<!-- ===== PHOTOS/RESULTS GRID ===== -->
+<div class="section-full" style="padding:80px 24px">
+  <div style="max-width:1000px;margin:0 auto">
+    <div class="photos-grid reveal">
+      <div class="photo-box"><div class="photo-box-inner">📊 Resultados</div><div class="label">+12 Anos</div></div>
+      <div class="photo-box"><div class="photo-box-inner">💰 Vendas</div><div class="label">+R$550M</div></div>
+      <div class="photo-box"><div class="photo-box-inner">🌍 Mercados</div><div class="label">+30 Países</div></div>
+      <div class="photo-box"><div class="photo-box-inner">🤝 Parceiros</div><div class="label">+30 Ofertas</div></div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);text-align:center;margin-top:16px;letter-spacing:.06em">Substitua pelas suas screenshots e provas sociais reais</p>
+  </div>
+</div>
+
+<!-- ===== DIFFERENCE ===== -->
+<div class="diff-bg section-full" style="padding:80px 24px">
+  <div style="max-width:1000px;margin:0 auto">
+    <div class="eyebrow reveal">A diferença entre 2020 e 2026</div>
+    <h2 class="big-title reveal">O JOGO<br>MUDOU.<br><span class="accent">RADICALMENTE.</span></h2>
+    <p class="body-text reveal">A resposta mais simples é que a plataforma mudou, mas quem tem informação privilegiada continua a ganhar — seja qual for o algoritmo.</p>
+    <div class="diff-table reveal">
+      <div class="diff-col before">
+        <div class="diff-col-label">Antes</div>
+        <h3>SEM ACESSO</h3>
+        <ul class="diff-list">
+          <li><span>✕</span>Conteúdo genérico de guru que nunca executou</li>
+          <li><span>✕</span>Copias estratégias que funcionaram no Brasil mas não em MZ</li>
+          <li><span>✕</span>Testa tudo sozinho, paga o preço do erro com o teu bolso</li>
+          <li><span>✕</span>Chega atrasado a cada oportunidade de mercado</li>
+          <li><span>✕</span>Não percebes porque os teus anúncios não convertem</li>
+        </ul>
+      </div>
+      <div class="diff-col after">
+        <div class="diff-col-label">Depois do Club</div>
+        <h3>COM O CLUBE</h3>
+        <ul class="diff-list">
+          <li><span>✦</span>Bastidores reais de quem faz mais de 8 dígitos</li>
+          <li><span>✦</span>Estratégias testadas e validadas para o mercado africano</li>
+          <li><span>✦</span>Templates prontos para copiar, adaptar e implementar</li>
+          <li><span>✦</span>Acesso antecipado a tendências antes de chegarem ao mainstream</li>
+          <li><span>✦</span>IA e automação aplicadas ao teu negócio, em língua portuguesa</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CF YELLOW INTRO ===== -->
+<div class="cf-intro-bg">
+  <h2>É POR ISSO QUE<br>CRIÁMOS O<br>VIP CLUB</h2>
+  <p>Este <strong>não é um produto para qualquer um.</strong> É para quem quer parar de adivinhar e começar a executar com base no que realmente funciona em Moçambique e em África.</p>
+</div>
+
+<!-- ===== WHAT YOU GET ===== -->
+<div class="section-full" style="padding:80px 24px;background:var(--dark)">
+  <div style="max-width:780px;margin:0 auto">
+    <div class="eyebrow reveal" style="justify-content:center">Aqui está o que você vai ter acesso hoje</div>
+    <h2 class="big-title reveal" style="text-align:center">TUDO O QUE<br>INCLUI O <span class="accent">CLUB</span></h2>
+
+    <!-- Close Friends -->
+    <div class="offer-block reveal">
+      <div class="offer-tag">Close Friends</div>
+      <h3>Acesso aos Meus "Melhores Amigos"</h3>
+      <div class="offer-value">Valor real: <strong>MT 1.200/mês</strong></div>
+      <ul class="offer-list">
+        <li>Estratégias de funil pago que os teus concorrentes NÃO CONHECEM</li>
+        <li>Estratégias de tráfego pago que fazem a máquina de vendas funcionar 24/7</li>
+        <li>Acesso a algumas das micro-ofertas que estou a RODAR actualmente</li>
+        <li>Suporte dedicado no Instagram do @[seuperfil]</li>
+        <li>Arquivos exclusivos, planilhas e documentos do meu CLOSE FRIENDS</li>
+        <li>Ofertas EXPLOSIVAS que só chegam a quem está dentro</li>
+      </ul>
+    </div>
+
+    <!-- Live Raio-X -->
+    <div class="offer-block reveal">
+      <div class="offer-tag live">🔴 Ao Vivo</div>
+      <h3>Raio-X do Teu Negócio</h3>
+      <div class="offer-value">Valor real: <strong>MT 2.500/sessão</strong></div>
+      <ul class="offer-list">
+        <li>Toda segunda-feira ao vivo às 20h: analisamos o teu produto, funil e oferta</li>
+        <li>A frase que resume tudo: "Faz isso aqui e você vende" — directa, sem rodeios</li>
+        <li>Isto é pular 6 meses de tentativa e erro</li>
+        <li>É jogar no nível do que realmente funciona</li>
+        <li>É começar já alinhado com o que converte</li>
+      </ul>
+    </div>
+
+    <!-- Comunidade -->
+    <div class="offer-block reveal">
+      <div class="offer-tag">Comunidade</div>
+      <h3>Grupo VIP — Só Membros</h3>
+      <div class="offer-value">Valor real: <strong>MT 800/mês</strong></div>
+      <ul class="offer-list">
+        <li>Network com players que faturam 6, 7 e 8 dígitos em meticais mensais</li>
+        <li>Lives com casos de sucesso REAIS do mercado moçambicano</li>
+        <li>Ferramentas descobertas pelos membros antes de chegarem ao mainstream</li>
+        <li>Suporte directo dos maiores operadores do mercado digital em África</li>
+        <li>Sala de tráfego avançado com análises semanais de campanhas reais</li>
+      </ul>
+    </div>
+
+    <!-- IA / No Brainer -->
+    <div class="offer-block reveal">
+      <div class="offer-tag">Inteligência Artificial</div>
+      <h3>IA Aplicada ao Teu Negócio</h3>
+      <div class="offer-value">Valor real: <strong>MT 1.800</strong></div>
+      <ul class="offer-list">
+        <li>Acesso a ferramentas de IA feitas para o mercado de marketing digital em MZ</li>
+        <li>Anúncios altamente persuasivos gerados em minutos</li>
+        <li>Páginas de alta conversão adaptadas para o público africano</li>
+        <li>Produtos digitais milionários criados em menos de um dia</li>
+        <li>Templates prontos para copiar e adaptar ao teu nicho</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="divider" style="max-width:600px;padding:0 24px"></div>
+
+<!-- ===== TESTIMONIALS ===== -->
+<div class="section-full" style="padding:80px 24px;background:linear-gradient(180deg,var(--dark2) 0%,var(--black) 100%)">
+  <div style="max-width:1000px;margin:0 auto">
+    <div class="eyebrow reveal" style="justify-content:center">Resultados de quem entrou</div>
+    <h2 class="big-title reveal" style="text-align:center">QUEM BEBEU<br>DA <span class="accent">FONTE.</span></h2>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">Entrei sem grande expectativa e fui completamente surpreendido. Apliquei uma estratégia que aprendi num único story e fechei 3 contratos na semana seguinte.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">CM</div>
+          <div>
+            <div class="testi-name">Carlos Machava</div>
+            <div class="testi-handle">@carlosmachava · Maputo</div>
+          </div>
+        </div>
+        <div class="testi-result">📈 Fechou 3 contratos na primeira semana</div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">Já tinha tentado vários cursos. Este é o único espaço onde recebo estratégias que fazem sentido para o mercado aqui em Moçambique. Completamente diferente.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">RL</div>
+          <div>
+            <div class="testi-name">Rosa Langa</div>
+            <div class="testi-handle">@rosalanga · Beira</div>
+          </div>
+        </div>
+        <div class="testi-result">💡 Dobrou as vendas em 45 dias</div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">A live semanal vale mais do que qualquer mentoria individual que já paguei. As respostas são directas, sem rodeios. Exactamente o que precisava.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">JP</div>
+          <div>
+            <div class="testi-name">João Pelembe</div>
+            <div class="testi-handle">@joaopelembe · Nampula</div>
+          </div>
+        </div>
+        <div class="testi-result">🚀 Saiu do zero para MT 180k/mês</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PRICING ===== -->
+<div id="planos" class="section-full" style="padding:80px 24px">
+  <div class="eyebrow reveal" style="justify-content:center;max-width:780px;margin:0 auto 20px">Escolhe o teu acesso</div>
+  <h2 class="big-title reveal" style="text-align:center">TUDO O QUE<br>TENS HOJE</h2>
+  <div class="pricing-wrap">
+    <div class="price-summary reveal">
+      <ul class="price-items">
+        <li><span class="name">Close Friends VIP (acesso mensal)</span><span class="val">MT 1.200</span></li>
+        <li><span class="name">Raio-X ao Vivo (toda segunda)</span><span class="val">MT 2.500</span></li>
+        <li><span class="name">Grupo VIP — Só Membros</span><span class="val">MT 800</span></li>
+        <li><span class="name">IA Aplicada ao Teu Negócio</span><span class="val">MT 1.800</span></li>
+        <li><span class="name">Valor total</span><span class="val strike">MT 6.300</span></li>
+      </ul>
+      <div class="price-total-area">
+        <div class="price-from">De MT 6.300</div>
+        <div class="price-big"><sup>MT</sup>297</div>
+        <div class="price-period">por mês · cancele quando quiser</div>
+        <div class="price-installments">ou <strong>6× de MT 55</strong> sem juros</div>
+        <a href="#" class="btn-buy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Garantir o Meu Acesso VIP
+        </a>
+        <div class="vagas-text">Vagas restantes: <strong>47</strong> · Renovação automática mensal</div>
+      </div>
+    </div>
+
+    <div class="guarantee reveal">
+      <div class="guarantee-seal">
+        <span>🛡️</span>
+        <span>Garantia<br>7 Dias</span>
+      </div>
+      <div>
+        <h3>Garantia Blindada</h3>
+        <p>Se em 7 dias não estiveres absolutamente satisfeito com as estratégias e o conteúdo, devolvo 100% do valor investido. Sem perguntas, sem burocracia, sem drama. Só quero dentro quem acredita genuinamente no espaço.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOUNDER ===== -->
+<div class="founder-section">
+  <div class="founder-inner">
+    <div class="founder-photo-wrap">
+      <div class="founder-photo-box">
+        <span>[ Sua foto aqui ]</span>
+      </div>
+      <div class="founder-tag">Fundador · VIP Club</div>
+    </div>
+    <div>
+      <div class="eyebrow reveal">Trajectória</div>
+      <h2 class="big-title reveal">O SEU<br><span class="accent">NOME</span></h2>
+      <p class="body-text reveal" style="margin-bottom:24px">Texto curto de bio aqui — quem és, de onde vieste, o que já construíste. Em 2–3 linhas directas e confiantes.</p>
+      <ul class="founder-timeline reveal">
+        <li class="timeline-item"><span class="timeline-year">2018</span><span class="timeline-text">Começou a estudar marketing digital sem experiência</span></li>
+        <li class="timeline-item"><span class="timeline-year">2020</span><span class="timeline-text">Primeiras vendas online em Moçambique</span></li>
+        <li class="timeline-item"><span class="timeline-year">2022</span><span class="timeline-text">Construiu a primeira estrutura de equipa de vendas</span></li>
+        <li class="timeline-item"><span class="timeline-year">2024</span><span class="timeline-text">Alcançou 7 dígitos em meticais mensalmente</span></li>
+        <li class="timeline-item"><span class="timeline-year">2025</span><span class="timeline-text">Lança o VIP Club para partilhar o que realmente funciona</span></li>
+      </ul>
+      <div style="margin-top:32px">
+        <a href="#planos" class="btn-main">Quero Fazer Parte do Club</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FAQ ===== -->
+<div class="section-full" style="padding:80px 24px">
+  <div style="max-width:780px;margin:0 auto">
+    <div class="eyebrow reveal">Antes de decidir</div>
+    <h2 class="big-title reveal">PROTOCOLO<br>DE <span class="accent">GARANTIA</span></h2>
+    <div class="faq-list reveal">
+      <div class="faq-item open">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h4>#1 Quais são as formas de pagamento?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">Aceitamos M-Pesa, e-Mola, cartão de crédito e débito (Visa/Mastercard). O pagamento é processado de forma segura e o acesso é imediato após a confirmação.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h4>#2 Como vou receber o acesso ao Money Club?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">Após a confirmação do pagamento, recebes automaticamente o link de acesso ao Close Friends do Instagram e ao grupo VIP. O processo demora menos de 5 minutos.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h4>#3 O conteúdo é ao vivo ou gravado?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">Os stories do Close Friends são publicados 3 vezes por semana. As lives são ao vivo toda segunda-feira às 20h (hora de Maputo), e ficam gravadas por 7 dias para quem não puder assistir ao vivo.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h4>#4 Por quanto tempo terei acesso?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">O acesso é mensal com renovação automática. Podes cancelar quando quiseres, sem penalidade, e manterás o acesso até ao final do período pago.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h4>#5 Qual é a plataforma de acesso?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">O conteúdo principal é entregue através do Instagram (Close Friends / Melhores Amigos) e de um grupo exclusivo no WhatsApp. Não precisas de instalar nenhuma aplicação nova.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h4>#6 O pagamento é seguro?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">Sim. Todos os pagamentos são processados via gateway seguro com criptografia SSL. Não armazenamos dados do teu cartão.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h4>#7 Moro fora de Maputo. Posso participar?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">Absolutamente. O clube tem membros em Maputo, Beira, Nampula, Tete e várias outras cidades. O conteúdo é digital e acessível de qualquer lugar com internet.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h4>#8 Já tenho experiência, este espaço é para mim?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">Sim. O conteúdo cobre desde quem está a iniciar até quem já fatura mensalmente e quer escalar. Os bastidores são úteis para qualquer nível de experiência.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h4>#9 E se eu não gostar?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">Tens 7 dias de garantia total. Se não sentires que o conteúdo vale o investimento, devolvemos 100% do valor pago. Sem perguntas.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h4>#10 Quero aparecer como influenciador. Isto funciona para mim?</h4>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">Sim. Muitos membros usam as estratégias para construir audiência, monetizar conteúdo e criar negócios ao redor da sua presença nas redes sociais.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:48px;padding:36px;background:var(--dark2);border-left:3px solid var(--gold);border-radius:2px">
+      <p style="font-size:14px;color:var(--light);line-height:1.8;font-style:italic">
+        <span style="color:var(--gold);font-weight:600">Ps:</span> Lembra-te que és o Primeiro Sócio do VIP Club — você vai ter acesso às estratégias de quem já faz resultados em Moçambique. Quanto tempo vais continuar a perder?
+      </p>
+      <p style="font-size:14px;color:var(--muted);margin-top:12px;line-height:1.8;font-style:italic">
+        <span style="color:var(--gold);font-weight:600">Pss:</span> Se você chegou até aqui, sabe que esta oportunidade é real. O mercado não espera. A questão é se vais estar dentro ou de fora quando o nível subir.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FINAL CTA ===== -->
+<div class="final-section">
+  <h2>QUERO FAZER<br>PARTE DO<br>VIP CLUB</h2>
+  <p>As vagas são limitadas e quando fecham, fecham. O conteúdo de amanhã já está pronto. A questão é se você vai ter acesso.</p>
+  <a href="#planos" class="btn-dark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Garantir Minha Vaga Agora
+  </a>
+  <div class="final-vagas">Vagas restantes: <strong>47</strong> · Garantia de 7 dias · Cancele quando quiser</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    © 2025 VIP Club · Todos os direitos reservados<br>
+    <a href="#">Política de Privacidade</a> · <a href="#">Termos de Uso</a> · <a href="#">Contacto</a>
+  </p>
+</footer>
+
+<!-- STICKY BAR -->
+<div class="sticky-bar" id="stickyBar">
+  <span class="sticky-text">🔥 <strong>47 vagas restantes</strong> · Oferta de lançamento</span>
+  <a href="#planos" class="btn-main">Garantir Acesso</a>
+</div>
+
+<script>
+// ── Countdown Timer ──
+function updateTimer() {
+  const end = new Date(Date.now() + 9*24*60*60*1000 + 11*60*60*1000 + 30*60*1000 + 36*1000);
+  function tick() {
+    const diff = end - Date.now();
+    if (diff <= 0) { document.getElementById('timer').textContent = '00:00:00:00'; return; }
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor((diff%86400000)/3600000);
+    const m = Math.floor((diff%3600000)/60000);
+    const s = Math.floor((diff%60000)/1000);
+    document.getElementById('timer').textContent = 
+      `${String(d).padStart(2,'0')}:${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    setTimeout(tick, 1000);
+  }
+  tick();
+}
+updateTimer();
+
+// ── Sticky Bar ──
+const stickyBar = document.getElementById('stickyBar');
+const hero = document.querySelector('.hero');
+const heroObserver = new IntersectionObserver(entries => {
+  stickyBar.classList.toggle('visible', !entries[0].isIntersecting);
+}, { threshold: 0.2 });
+heroObserver.observe(hero);
+
+// ── FAQ ──
+document.querySelectorAll('.faq-question').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    document.querySelectorAll('.faq-item').forEach(i => { if (i !== item) i.classList.remove('open'); });
+  });
+});
+
+// ── Scroll Reveals ──
+const reveals = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), 60 * (entry.target.dataset.i || 0));
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach((el, i) => { el.dataset.i = i % 4; revealObserver.observe(el); });
+</script>
+</body>
+</html>
